@@ -29,18 +29,10 @@ class Home extends Component {
       API.articleQuery(query)
         .then(res => {
           console.log(res.data.response.docs)
-          // const articleDB = res.data.response.docs.map(article => {
-          //   let item = {};
-          //   let title = "headline.main";
-          //   let date = "pub_date".slice(0, 10);
-          //   let synopsis = "snippet";
-          //   let url = "web_url";
-          //   let id = "_id";
-
-          //   item.append(title, date, synopsis, url, id);
-          //   return item;
-          // })
-          // console.log(articleDB);
+          const articleDB = res.data.response.docs.map((item) => {
+            return item;
+          })
+          console.log(articleDB);
           this.setState({ articles: res.data.response.docs })
         })
         .catch(err => console.log(err));
@@ -61,57 +53,39 @@ class Home extends Component {
         </Row>
         <Row>
           <Col size="12 md-6">
-            <form>
-              <h3>Search</h3>
-              <Input
-                value={this.state.topic}
-                onChange={this.handleInputChange}
-                name="topic"
-                placeholder="Topic (required)"
-              />
-              <Input
-                value={this.state.startYear}
-                onChange={this.handleInputChange}
-                name="startYear"
-                placeholder="Start Year (required)"
-              />
-              <Input
-                value={this.state.endYear}
-                onChange={this.handleInputChange}
-                name="endYear"
-                placeholder="End Year (required)"
-              />
-              <FormBtn
-                className="form-group"
-                disabled={!(this.state.topic) && !(this.state.startYear) && !(this.state.endYear)}
-                onClick={this.handleFormSubmit}
-              >
-                Search
+            <Row>
+              <form className="fullwidth ml-3">
+                <h3>Search</h3>
+                <Input
+                  value={this.state.topic}
+                  onChange={this.handleInputChange}
+                  name="topic"
+                  placeholder="Topic (required)"
+                />
+                <Input
+                  value={this.state.startYear}
+                  onChange={this.handleInputChange}
+                  name="startYear"
+                  placeholder="Start Year (required)"
+                />
+                <Input
+                  value={this.state.endYear}
+                  onChange={this.handleInputChange}
+                  name="endYear"
+                  placeholder="End Year (required)"
+                />
+                <FormBtn
+                  className="form-group"
+                  disabled={!(this.state.topic) && !(this.state.startYear) && !(this.state.endYear)}
+                  onClick={this.handleFormSubmit}
+                >
+                  Search
               </FormBtn>
-            </form>
-          </Col>
-          <Col size="12 md-6">
-            {!this.state.articles ? (
-              <h3 className="text-center">No Articles to Display</h3>
-            ) : (
-                <List>
-                  {this.state.articles.map(articles => {
-                    return (
-                      <ListItem
-                        title={articles.headline.main}
-                        date={articles.pub_date.slice(0, 10)}
-                        synopsis={articles.snippet}
-                        url={articles.web_url}
-                        id={articles._id}
-                      />
-                    )
-                  })}
-                </List>
-              )}
-          </Col>
-          {/* <Col size="12 md-6">
-            <h3 className="border-top">Saved Articles</h3>
-            {!this.state.articles ? (
+              </form>
+            </Row>
+            <Row>
+              <h3 className="border-top fullwidth ml-3">Saved Articles</h3>
+              {/* {!this.state.articles ? (
               <h3 className="text-center">No Saved Articles to Display</h3>
             ) : (
                 <List>
@@ -126,8 +100,30 @@ class Home extends Component {
                     )
                   })}
                 </List>
+              )} */}
+            </Row>
+          </Col>
+          <Col size="12 md-6">
+            {!this.state.articles ? (
+              <h3 className="text-center">No Articles to Display</h3>
+            ) : (
+                <List>
+                  {this.state.articles.map(articles => {
+                    return (
+                      <ListItem
+                        title={!articles.headline.main ? (
+                          "Lorem Ipsum"
+                        ) : (articles.headline.main)}
+                        date={articles.pub_date.slice(0, 10)}
+                        synopsis={articles.snippet}
+                        url={articles.web_url}
+                        id={articles._id}
+                      />
+                    )
+                  })}
+                </List>
               )}
-          </Col> */}
+          </Col>
         </Row>
       </Container>
     )
