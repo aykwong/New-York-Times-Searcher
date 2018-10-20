@@ -1,0 +1,10 @@
+body {
+    overflow: hidden;
+}
+
+.articleList {
+    box-sizing: border-box;
+    overflow: auto;
+    border: 1px solid black;
+    max-height: 480px;
+};
