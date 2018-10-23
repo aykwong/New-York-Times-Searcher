@@ -4,6 +4,7 @@ import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
 import { Input, FormBtn } from "../../components/Form";
 import { List, ListItem } from "../../components/List";
+import SaveBtn from "../../components/SaveBtn";
 
 class Home extends Component {
   state = {
@@ -28,7 +29,6 @@ class Home extends Component {
 
       API.articleQuery(query)
         .then(res => {
-          console.log(res.data.response.docs)
           const articleDB = res.data.response.docs.map((item) => {
             return item;
           })
@@ -37,6 +37,19 @@ class Home extends Component {
         })
         .catch(err => console.log(err));
     }
+  };
+
+  saveArticle = (id) => {
+    const query = this.state.articles.filter((obj) => {
+      return obj._id === id;
+    });
+    console.log(query);
+
+    API.saveArticle(query)
+    .then(res => {
+      this.setState({ saved: res.data })
+    })
+    .catch(err => console.log(err));
   };
 
   render() {
@@ -55,7 +68,7 @@ class Home extends Component {
           <Col size="12 md-6">
             <Row>
               <form className="fullwidth ml-3">
-                <h3>Search</h3>
+                <h3 className="border-bottom">Search</h3>
                 <Input
                   value={this.state.topic}
                   onChange={this.handleInputChange}
@@ -84,7 +97,7 @@ class Home extends Component {
               </form>
             </Row>
             <Row>
-              <h3 className="border-top fullwidth ml-3">Saved Articles</h3>
+              <h3 className="border-top border-bottom fullwidth ml-3">Saved Articles</h3>
               {/* {!this.state.articles ? (
               <h3 className="text-center">No Saved Articles to Display</h3>
             ) : (
@@ -104,21 +117,23 @@ class Home extends Component {
             </Row>
           </Col>
           <Col size="12 md-6">
+            <h3 className="border-bottom">Articles</h3>
             {!this.state.articles ? (
-              <h3 className="text-center">No Articles to Display</h3>
+              <h5 className="text-center">None to Display</h5>
             ) : (
                 <List>
                   {this.state.articles.map(articles => {
                     return (
                       <ListItem
-                        title={!articles.headline.main ? (
-                          "Lorem Ipsum"
-                        ) : (articles.headline.main)}
+                        title={!articles.headline.main ? ("Lorem Ipsum") : (articles.headline.main)}
                         date={articles.pub_date.slice(0, 10)}
                         synopsis={articles.snippet}
-                        url={articles.web_url}
-                        id={articles._id}
-                      />
+                        id={articles._id}>
+                        <a href={articles.web_url} className="btn btn-info" rel="noreferrer noopener" target="_blank">
+                          Link
+                        </a>
+                        <SaveBtn onClick={() => this.saveArticle(articles._id)} />
+                      </ListItem>
                     )
                   })}
                 </List>

@@ -2,7 +2,7 @@ var router = require('express').Router();
 const articleController = require("../../controller/articleController");
 
 /* GET users listing. */
-router.route('/articles')
+router.route('/saved')
   // Query MongoDB for all saved articles
   .get(articleController.findAll)
   // Save Articles to the database
