@@ -17,17 +17,11 @@ export default {
   },
 
   getArticles: function () {
-    return axios.get("/api/articles")
-      .then(function (results) {
-        return results;
-      });
+    return axios.get("http://localhost:3001/api/saved")
   },
 
-  deleteBook: function (id) {
-    return axios.delete("/api/articles/" + id)
-      .then(function (results) {
-        return results;
-      });
+  deleteArticle: function (id) {
+    return axios.delete(`http://localhost:3001/api/articles/${id}`)
   },
 
   saveArticle: function (query) {
@@ -40,9 +34,6 @@ export default {
     };
 
     console.log(newArticle);
-    return axios.post("/api/saved", newArticle)
-      .then(function (results) {
-        return results;
-      });
+    return axios.post("http://localhost:3001/api/saved", newArticle)
   }
 };

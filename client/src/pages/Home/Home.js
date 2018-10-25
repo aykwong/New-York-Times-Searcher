@@ -5,6 +5,7 @@ import API from "../../utils/API";
 import { Input, FormBtn } from "../../components/Form";
 import { List, ListItem } from "../../components/List";
 import SaveBtn from "../../components/SaveBtn";
+import RemoveBtn from "../../components/RemoveBtn";
 
 class Home extends Component {
   state = {
@@ -39,6 +40,14 @@ class Home extends Component {
     }
   };
 
+  getSavedArticles = () => {
+    API.getArticles()
+      .then(res => {
+        this.setState({ saved: res.data })
+      })
+      .catch(err => console.log(err));
+  };
+
   saveArticle = (id) => {
     const query = this.state.articles.filter((obj) => {
       return obj._id === id;
@@ -46,8 +55,16 @@ class Home extends Component {
     console.log(query);
 
     API.saveArticle(query)
+      .then(res => {
+        this.getSavedArticles();
+      })
+      .catch(err => console.log(err));
+  };
+
+  deleteArticle = (id) => {
+    API.deleteArticle(id)
     .then(res => {
-      this.setState({ saved: res.data })
+      this.getSavedArticles();
     })
     .catch(err => console.log(err));
   };
@@ -98,22 +115,23 @@ class Home extends Component {
             </Row>
             <Row>
               <h3 className="border-top border-bottom fullwidth ml-3">Saved Articles</h3>
-              {/* {!this.state.articles ? (
-              <h3 className="text-center">No Saved Articles to Display</h3>
-            ) : (
-                <List>
-                  {this.state.articles.map(articles => {
-                    return (
-                      <ListItem
-                        title={articles.headline.main}
-                        date={articles.pub_date.slice(0, 10)}
-                        synopsis={articles.snippet}
-                        url={articles.web_url}
-                      />
-                    )
-                  })}
-                </List>
-              )} */}
+              {!this.state.saved ? (
+                <h3 className="text-center">No Saved Articles to Display</h3>
+              ) : (
+                  <List>
+                    {this.state.saved.map(saved => {
+                      return (
+                        <ListItem
+                          title={saved.title}
+                          date={saved.date}
+                          url={saved.url}
+                        >
+                          <RemoveBtn onClick={() => this.deleteArticle(saved._id)} />
+                        </ListItem>
+                      )
+                    })}
+                  </List>
+                )}
             </Row>
           </Col>
           <Col size="12 md-6">
