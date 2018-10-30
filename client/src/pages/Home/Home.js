@@ -3,7 +3,7 @@ import { Col, Row, Container } from "../../components/Grid";
 import Jumbotron from "../../components/Jumbotron";
 import API from "../../utils/API";
 import { Input, FormBtn } from "../../components/Form";
-import { List, ListItem } from "../../components/List";
+import { List, ListItem, SaveList } from "../../components/List";
 import SaveBtn from "../../components/SaveBtn";
 import RemoveBtn from "../../components/RemoveBtn";
 
@@ -11,6 +11,10 @@ class Home extends Component {
   state = {
     article: {}
   };
+
+  componentDidMount() {
+    this.getSavedArticles();
+  }
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -63,10 +67,10 @@ class Home extends Component {
 
   deleteArticle = (id) => {
     API.deleteArticle(id)
-    .then(res => {
-      this.getSavedArticles();
-    })
-    .catch(err => console.log(err));
+      .then(res => {
+        this.getSavedArticles();
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -116,18 +120,18 @@ class Home extends Component {
             <Row>
               <h3 className="border-top border-bottom fullwidth ml-3">Saved Articles</h3>
               {!this.state.saved ? (
-                <h3 className="text-center">No Saved Articles to Display</h3>
+                <h3 className="text-center fullwidth ml-3">No Saved Articles to Display</h3>
               ) : (
-                  <List>
+                  <List className="list-overflow-container savedList">
                     {this.state.saved.map(saved => {
                       return (
-                        <ListItem
+                        <SaveList
                           title={saved.title}
                           date={saved.date}
                           url={saved.url}
                         >
                           <RemoveBtn onClick={() => this.deleteArticle(saved._id)} />
-                        </ListItem>
+                        </SaveList>
                       )
                     })}
                   </List>
@@ -139,7 +143,7 @@ class Home extends Component {
             {!this.state.articles ? (
               <h5 className="text-center">None to Display</h5>
             ) : (
-                <List>
+                <List className="list-overflow-container articleList">
                   {this.state.articles.map(articles => {
                     return (
                       <ListItem
