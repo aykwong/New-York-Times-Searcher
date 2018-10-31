@@ -17,11 +17,11 @@ export default {
   },
 
   getArticles: function () {
-    return axios.get("http://localhost:3001/api/saved")
+    return axios.get("/api/saved")
   },
 
   deleteArticle: function (id) {
-    return axios.delete(`http://localhost:3001/api/articles/${id}`)
+    return axios.delete(`/api/articles/${id}`)
   },
 
   saveArticle: function (query) {
@@ -34,6 +34,6 @@ export default {
     };
 
     console.log(newArticle);
-    return axios.post("http://localhost:3001/api/saved", newArticle)
+    return axios.post("/api/saved", newArticle)
   }
 };
